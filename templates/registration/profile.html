@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %} profile  {% endblock %}
+
+
+{% block content %}
+
+<div class="container text-center">    
+  <div class="row">
+    <div class="col-sm-3 well">
+      <div class="well">
+        {% if user_curr.avatar %}
+        <img src="{{user_curr.avatar.url}}" class="img-circle" height="65" width="65" alt="Avatar">
+        {% endif %}
+        <h3>{{user_curr.username}}</h3> 
+        {% if not request.user == user_curr and not is_folllowing %}
+          <a class="btn btn-success" href="{% url 'accounts:follow' user_curr.pk %}">follow</a>
+        {% endif %}
+        {% if not request.user == user_curr and  is_folllowing %}
+          <a class="btn btn-warning" href="{% url 'accounts:unfollow' user_curr.pk %}">unfollow</a>
+        {% endif %}
+      </div>
+
+      </div>
+    <div class="col-sm-7">
+    
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="col-sm-12 well " >
+            <div class="col-sm-6">
+              <div class="card" style="text-align: left;">
+                <div class="card-header">
+                  Information
+                </div>
+                <div class="card-body">
+                  <blockquote class="blockquote mb-0">
+                    <p>My name is <span>{{user_curr.get_full_name}}</span></p>
+                    <p>{{user_curr.bio}}</p>
+                    <footer class="blockquote-footer">Use this media since <cite title="Source Title">{{user_curr.date_joined}}</cite></footer>
+                  </blockquote>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              {% if user_curr.avatar %}
+              <img class="img-responsive img-thumbnail" src="{{user_curr.avatar.url}}" alt="avatar" height="300" width="300"> 
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      
+      {% for post in object_list %}
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="col-sm-3 ">
+            <br>
+            <br>
+            <a href="{% url 'posts:detail-post' post.pk %}"><img src="{{post.image.url}}" alt="post" width="100" height="100"></a>
+          </div>
+          <div class="well">
+            <p>{{post.description}}</p>
+            <p>{{post.publish}}</p>
+            {% if post.user == request.user %}
+            <a href="{% url 'posts:update-post' post.pk %}" class="glyphicon glyphicon-pencil">Edit</a>
+            {% endif %}
+            <a href="{% url 'posts:like' post.pk %}" class="glyphicon glyphicon-thumbs-up">Like {{post.like.count}}</a> 
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% if user_curr == request.user %}
+    <div class="col-sm-2 well">
+      <div class="row">
+        <a href="{% url 'posts:create-post' %}" class="btn btn-primary">ADD Post</a>
+        <br>
+        <br>
+        <a href="{% url 'accounts:profile-update' user.pk %}" class="btn btn-primary">Edit profile</a>
+      </div>      
+      {% endif %}
+       
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

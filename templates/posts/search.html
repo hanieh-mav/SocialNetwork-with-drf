@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %} Search {% endblock %}
+
+{% block content %}
+
+<div class="container text-center">    
+  <div class="row">
+    <div class="col-sm-3 well">
+      <div class="well">
+        {% if user.is_authenticated %}
+        <p><a href="{% url 'accounts:profile' user.pk %}">My Profile</a></p>
+        <p>welcome <b>{{user.username}}</b></p>
+        {% if user.avatar %}
+        <img src="{{user.avatar.url}}" class="img-circle" height="65" width="65" alt="Avatar">
+        {% endif %}
+        {% endif %}
+        
+      </div>
+  
+    </div>
+    <div class="col-sm-7">
+      {% if queryset_list %}
+      {% for user in queryset_list %}
+      <div class="row">
+        <div class="col-sm-3">
+            <div class="card" style="width: 18rem;">
+              {% if user.avatar %}
+              <img class="card-img-top" src="{{user.avatar.url}}" alt="avatar" height="150" width="150"">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{user.username}}</h5>
+                <a href="{% url 'accounts:profile' user.pk %}" class="btn btn-primary">See Profile</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        {% endfor %}
+        {% else %}
+        <br>
+        <div class="alert alert-warning" role="alert">
+          This user not found — Try again !
+        </div>
+      {% endif %}
+    </div>
+
+
+    
+    <div class="col-sm-2 well">
+      <div class="row">
+        
+        <a href="{% url 'posts:create-post' %}" class="btn btn-primary">ADD Post</a>
+      </div>      
+      
+    </div>
+  </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}

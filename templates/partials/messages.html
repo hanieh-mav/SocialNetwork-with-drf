@@ -1,0 +1,18 @@
+{% if messages %}
+
+    {% for msg in messages %}
+        <p id="myp" style="text-align: center;" class="alert alert-{{ msg.tags }}">{{msg}}
+            <span onclick="myFunction()" class="glyphicon glyphicon-remove"></span>
+        </p>
+    {% endfor %}
+
+{% endif %}
+
+
+<script>
+
+    function myFunction() {
+        document.getElementById("myp").style.display = "none";
+        
+      } 
+</script>

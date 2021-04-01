@@ -1,0 +1,42 @@
+{% for cm in cm.rcomment.all %}
+   <div class="geser" style="text-align: left; margin-left:2px; margin-top:5px;">
+    <div class="media">
+       <div class="media-left">
+         {% if cm.user.avatar %}
+         <img src="{{cm.user.avatar.url}}" class="media-object" style="width:40px">
+         {% endif %}
+       </div>
+       <div class="media-body">
+         <h4 class="media-heading title">{{cm.user}}</h4>
+         <p class="komen">
+             {{cm.body}}<br>
+             <a href="{% url 'posts:delete-comment' post.pk cm.pk  %}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a> 
+<!-----------------------ADD COMMENT REPLY  ------------------------------------------>  
+                   
+           <form id='repcm' action="{% url 'posts:add-reply' post.pk cm.pk  %}" class="ps-product__review" method="post">
+            {% csrf_token %}
+            <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
+                    <div class="form-group" >
+                      <label >reply</label>
+                      {{form.body}}
+                    </div>
+                    <!---rating-->
+                    <div class="form-group">
+                      <button class="ps-btn ps-btn--sm">Submit<i class="ps-icon-next"></i></button>
+                    </div>
+                  </div>
+            </div>
+          </form>
+<!-----------------------END ADD REPLY------------------------------------------>
+<!-----------------------SHOW REPLY COMMNETS------------------------------------------> 
+          {% if cm.rcomment %}
+            {% include 'posts/replycm_loop.html' %}
+          {% endif %}
+<!-----------------------END SHOW REPLY COMMNETS------------------------------------------>
+         </p>
+       </div>
+     </div>
+   </div>
+  {% endfor %}
+

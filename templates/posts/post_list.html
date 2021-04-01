@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+ 
+{% block content %}
+
+<div class="container text-center">    
+  <div class="row">
+    
+  {% include 'partials/sidebar.html' %}
+
+
+    <div class="col-sm-7">
+      <div class="row">
+        <div class="col-sm-12"></div>
+      </div>
+    {% if post %}
+      {% for post in post %}
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="well">
+           <p><a href="{% url 'accounts:profile' post.user.pk %}">{{post.user.username}}</a></p>
+           {% if post.user.avatar %}
+           <img src="{{post.user.avatar.url}}" class="img-circle" height="55" width="55" alt="Avatar">
+           {% endif %}
+          </div>
+        </div>
+        <div class="col-sm-9">
+          <div class="col-sm-3 ">
+            <br>
+            <a href="{% url 'posts:detail-post' post.pk %}"><img src="{{post.image.url}}" alt="post" width="100" height="100"></a>
+          </div>
+          <div class="well">
+            <p>{{post.description}}</p>
+            <p>{{post.publish}}</p>
+            {% if post.user == request.user %}
+            <a href="{% url 'posts:update-post' post.pk %}" class="glyphicon glyphicon-pencil"></a>
+            {% endif %}
+            <a href="{% url 'posts:like' post.pk %}" class="glyphicon glyphicon-thumbs-up">{{post.like.count}}</a> 
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+    <br>
+    <div class="alert alert-warning" role="alert">
+      There isn't any post to show !
+    </div>
+    {% endif %}
+
+    <!-----------------------Pagination--------------------------->
+{% if post.has_other_pages %}
+<div class="row">
+  <div class="col-sm-12 col-md-5">
+  </div>
+  <div class="col-sm-12 col-md-7">
+    <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+      <ul class="pagination">
+        {% if post.has_previous %}
+        <li class="paginate_button page-item previous " id="dataTable_previous">
+          <a href="{% url 'posts:post-list' post.previous_page_number %}" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+        </li>
+        {% else %}
+        <li class="paginate_button page-item previous disabled" id="dataTable_previous">
+          <a  aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+        </li>
+        {% endif %}
+       {% for i in post.paginator.page_range %}
+        {% if post.number == i %}
+        <li class="paginate_button page-item active">
+          <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">{{i}}</a>
+        </li>
+        {% else %}
+        <li class="paginate_button page-item ">
+          <a href="{% url 'posts:post-list' i %}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">{{i}}</a>
+        </li>
+        {% endif %}
+       {% endfor %}
+        {% if post.has_next %}
+        <li class="paginate_button page-item next" id="dataTable_next">
+          <a href="{% url 'posts:post-list' post.next_page_number %}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+        </li>
+        {% else %}
+        <li class="paginate_button page-item next disabled" id="dataTable_next">
+          <a aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+<!-----------------------End Pagination--------------------------->
+
+{% endif %}
+    </div>
+    <div class="col-sm-2 well">
+      <div class="row">
+        
+        <a href="{% url 'posts:create-post' %}" class="btn btn-primary">ADD Post</a>
+      </div>      
+      
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
