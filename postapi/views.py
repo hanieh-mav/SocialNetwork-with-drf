@@ -1,12 +1,15 @@
-from rest_framework import generics , permissions , response , status , exceptions
-from .serializer import PostSerializer
-from posts.models import Post
+from rest_framework import generics , permissions , exceptions 
+from .serializer import PostSerializer , CommentSerializer
+from posts.models import Post , Comment
 from accounts.models import Friend
 from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
 class PostList(generics.ListCreateAPIView):
+
+    """ show list of user's post and user's friend post """
+
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -29,11 +32,14 @@ class PostList(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    """ show detail of user's post and user's firend post 
+    but only user of each post can delete and update post
+    """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
+
 
     def get_object(self):
         user = self.request.user
@@ -59,8 +65,48 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
         else:
             raise exceptions.ValidationError("this isn't your post to delete:)")
 
-       
 
-    
-        
-    
+class CommentList(generics.ListCreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        post = Post.objects.get( pk = self.kwargs['pk'] )
+        return Comment.objects.filter( post = post )
+
+    def perform_create(self,serializer):
+        user = self.request.user
+        post = Post.objects.get( pk = self.kwargs['pk'] )
+        serializer.save( user = user , post = post )
+
+
+class CommentDelete(generics.RetrieveDestroyAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        comment = Comment.objects.filter(user=user)
+        return comment
+
+   
+class ReplyAdd(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self,serializer):
+        user = self.request.user
+        post = get_object_or_404( Post , pk = self.kwargs['pk_post'] )
+        comment = get_object_or_404 ( Comment , pk = self.kwargs['pk_comment'] )
+        serializer.save( user = user , post = post , reply = comment , is_reply = True)
+
+
+
+class ReplyDelete(generics.RetrieveDestroyAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        comment = Comment.objects.filter(user=user)
+        return comment

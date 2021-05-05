@@ -23,3 +23,23 @@ class PostSerializer(serializers.ModelSerializer):
             },
         }
 
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id','user','reply','post','is_reply','body')
+        extra_kwargs = {
+            'user':{
+                'read_only':True
+            },
+            'reply':{
+                'read_only':True
+            },
+            'post':{
+                'read_only':True
+            },
+            'is_reply':{
+                'read_only':True
+            },
+
+        }
