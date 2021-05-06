@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.utils import timezone
 
+
 # Create your models here.
 
 class User(AbstractUser):

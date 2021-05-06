@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'accounts.apps.AccountsConfig',
     'postapi.apps.PostapiConfig',
+    'accountapi.apps.AccountapiConfig',
     'rest_framework',
 ]
 
