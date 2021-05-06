@@ -43,3 +43,14 @@ class CommentSerializer(serializers.ModelSerializer):
             },
 
         }
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('id','like')
+        extra_kwargs = {
+            'like': {
+                'read_only':True
+            },
+        }

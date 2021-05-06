@@ -1,5 +1,5 @@
-from rest_framework import generics , permissions , exceptions 
-from .serializer import PostSerializer , CommentSerializer
+from rest_framework import generics , permissions , exceptions  , mixins
+from .serializer import PostSerializer , CommentSerializer , LikeSerializer
 from posts.models import Post , Comment
 from accounts.models import Friend
 from django.shortcuts import get_object_or_404
@@ -101,7 +101,6 @@ class ReplyAdd(generics.CreateAPIView):
         serializer.save( user = user , post = post , reply = comment , is_reply = True)
 
 
-
 class ReplyDelete(generics.RetrieveDestroyAPIView):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -110,3 +109,40 @@ class ReplyDelete(generics.RetrieveDestroyAPIView):
         user = self.request.user
         comment = Comment.objects.filter(user=user)
         return comment
+
+
+class LikeAdd(generics.CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = LikeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self,serializer):
+        user = self.request.user
+        post = Post.objects.get( pk = self.kwargs['pk'] )
+        if user not in post.like.all():
+            post.like.add(user)
+            serializer.save()
+        else:
+            raise exceptions.ValidationError('You liked this post')
+
+
+class LikeDelete(generics.DestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = LikeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+
+    def perform_destroy(self,serializer):
+        user = self.request.user
+        post = Post.objects.get( pk = self.kwargs['pk'] )
+        if user in post.like.all():
+            post.like.remove(user)
+            serializer.save()
+        else:
+            raise exceptions.ValidationError("You haven't like this post")
+
+
+
+
+
+

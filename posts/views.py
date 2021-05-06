@@ -82,6 +82,7 @@ def like(request,pk):
         post.like.add(user)    
     return redirect('posts:post-list')
 
+
 @login_required
 def search(request):
     queryset_list = User.objects.all()
