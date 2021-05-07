@@ -1,13 +1,14 @@
 from django.urls import path
 from rest_framework import routers
-from .views import UserViewSet , FriendList , Follow , UnFollow
+from .views import (UserViewSet , FriendList , Follow , UnFollow )
+
+app_name = 'accountapi'
 
 router = routers.SimpleRouter()
 
 router.register('user',UserViewSet,basename='user')
 
 urlpatterns = router.urls
-
 
 urlpatterns = [
     path('friend/',FriendList.as_view(),name='friend_list'),

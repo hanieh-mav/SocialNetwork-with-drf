@@ -30,9 +30,11 @@ class Post(models.Model):
     def __str__(self):
         return '{}-{}'.format(self.user,self.description)
 
+
     def image_tag(self):
         return format_html("<img src='{}' width =60 height=50>".format(self.image.url))    
     image_tag.short_description = 'image'    
+
 
     def get_absolute_url(self):
         return reverse('posts:post-list')
