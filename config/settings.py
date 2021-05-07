@@ -44,6 +44,13 @@ INSTALLED_APPS = [
     'postapi.apps.PostapiConfig',
     'accountapi.apps.AccountapiConfig',
     'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -145,6 +152,17 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        
+    ],
     
 }
+
+SITE_ID = 1
+
+REST_USE_JWT = True
+
+JWT_AUTH_COOKIE = 'my-app-auth'
+JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
