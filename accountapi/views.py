@@ -7,12 +7,14 @@ from .permissions import UpdateOwnProfile
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
+    """ add update and selete user """
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username','first_name','last_name',)
 
-
+    """ only own user can change them profile 
+    but any user can register """
     def get_permissions(self):
         if self.action in ['create']:
             permission_classes = [permissions.AllowAny]
@@ -24,6 +26,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class FriendList(generics.ListAPIView):
+    """ show list user friend """
+
     serializer_class = FriendSerializer
 
     def get_queryset(self):
@@ -33,6 +37,7 @@ class FriendList(generics.ListAPIView):
 
 
 class Follow(generics.CreateAPIView):
+    """ follow user by pk """
     serializer_class = FriendSerializer
 
     def get_queryset(self):
@@ -51,6 +56,7 @@ class Follow(generics.CreateAPIView):
 
 
 class UnFollow(generics.RetrieveDestroyAPIView):
+    """ unfollow by pick user pk """
     serializer_class = FriendSerializer
 
     def get_object(self):

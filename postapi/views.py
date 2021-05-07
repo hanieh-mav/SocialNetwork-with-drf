@@ -65,6 +65,8 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CommentList(generics.ListCreateAPIView):
+    """ show list of comment post and  comment create """
+
     serializer_class = CommentSerializer
 
     def get_queryset(self):
@@ -78,6 +80,7 @@ class CommentList(generics.ListCreateAPIView):
 
 
 class CommentDelete(generics.RetrieveDestroyAPIView):
+    """ Delete comment post """
     serializer_class = CommentSerializer
 
     def get_queryset(self):
@@ -87,6 +90,7 @@ class CommentDelete(generics.RetrieveDestroyAPIView):
 
    
 class ReplyAdd(generics.CreateAPIView):
+    """ add reply to comment """
     serializer_class = CommentSerializer
 
     def perform_create(self,serializer):
@@ -97,6 +101,7 @@ class ReplyAdd(generics.CreateAPIView):
 
 
 class ReplyDelete(generics.RetrieveDestroyAPIView):
+    """ Delete reply """
     serializer_class = CommentSerializer
 
     def get_queryset(self):
@@ -106,6 +111,7 @@ class ReplyDelete(generics.RetrieveDestroyAPIView):
 
 
 class LikeAdd(generics.CreateAPIView):
+    """ like post  """
     queryset = Post.objects.all()
     serializer_class = LikeSerializer
 
@@ -120,6 +126,7 @@ class LikeAdd(generics.CreateAPIView):
 
 
 class LikeDelete(generics.DestroyAPIView):
+    """ delete like"""
     queryset = Post.objects.all()
     serializer_class = LikeSerializer
     
