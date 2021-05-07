@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from accounts.models import Friend
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,4 +37,16 @@ class UserSerializer(serializers.ModelSerializer):
         return super().update(instance,validated_data)
 
 
+class FriendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields = ('id','from_user','to_user')
+        extra_kwargs = {
+            'from_user':{
+                'read_only':True
+            },
+            'to_user':{
+                'read_only':True
+            },
+        }
     

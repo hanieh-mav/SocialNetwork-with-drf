@@ -11,8 +11,7 @@ class PostList(generics.ListCreateAPIView):
     """ show list of user's post and user's friend post """
 
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
+    
     def get_queryset(self):
         posts = list()
         user = self.request.user
@@ -38,7 +37,6 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
     def get_object(self):
@@ -68,7 +66,6 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         post = Post.objects.get( pk = self.kwargs['pk'] )
@@ -82,7 +79,6 @@ class CommentList(generics.ListCreateAPIView):
 
 class CommentDelete(generics.RetrieveDestroyAPIView):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -92,7 +88,6 @@ class CommentDelete(generics.RetrieveDestroyAPIView):
    
 class ReplyAdd(generics.CreateAPIView):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self,serializer):
         user = self.request.user
@@ -103,7 +98,6 @@ class ReplyAdd(generics.CreateAPIView):
 
 class ReplyDelete(generics.RetrieveDestroyAPIView):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -114,7 +108,6 @@ class ReplyDelete(generics.RetrieveDestroyAPIView):
 class LikeAdd(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self,serializer):
         user = self.request.user
@@ -129,7 +122,6 @@ class LikeAdd(generics.CreateAPIView):
 class LikeDelete(generics.DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = LikeSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
 
     def perform_destroy(self,serializer):
