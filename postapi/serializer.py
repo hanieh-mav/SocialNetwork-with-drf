@@ -8,6 +8,8 @@ class UserSerilaizer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ('id','username','first_name','last_name','email','avatar','bio',)
 
+
+
 class PostSerializer(serializers.ModelSerializer):
     user = UserSerilaizer()
     class Meta:
