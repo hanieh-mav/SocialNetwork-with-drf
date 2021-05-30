@@ -4,11 +4,11 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .mixins import AccessUser
 from django.views.generic import UpdateView , ListView 
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth import views as auth_view
 from .forms import RegisterUserForm
 from django.contrib import messages
 from django.contrib.auth import login
-
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -74,5 +74,23 @@ def register(request):
     return render(request,'registration/register.html',{'form':form})
                        
 
-class PasswordChange(PasswordChangeView):
+class PasswordChange(auth_view.PasswordChangeView):
     success_url = reverse_lazy('accounts:password_change_done')
+
+
+class UserPassReset(auth_view.PasswordResetView):
+    template_name = 'registration/password_reset_form.html'
+    success_url = reverse_lazy('accounts:password_reset_done')
+    email_template_name = 'registration/password_reset_email.html'
+
+class PassWordResetDone(auth_view.PasswordResetDoneView):
+    template_name = 'registration/reset_done.html'
+
+class PasswordResetConfirm(auth_view.PasswordResetConfirmView):
+    template_name = 'registration/password_reset_confirm.html'
+    success_url = reverse_lazy('accounts:password_reset_complete')
+
+
+class PasswordResetComplete(auth_view.PasswordResetCompleteView):
+    template_name = 'registration/password_reset_complete.html'
+
