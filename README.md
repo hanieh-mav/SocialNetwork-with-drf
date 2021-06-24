@@ -4,7 +4,6 @@ also used django rest framework and have api too
 
 Requirements
 
-Python3.8, Django3.1
 
     1-Create a virtual environment by command virtualenv -p python env
     2-Activate env through source env/bin/activate.
