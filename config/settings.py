@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     # 'crispy_forms',
     'posts.apps.PostsConfig',
     'accounts.apps.AccountsConfig',
-    'story.apps.StoryConfig',
     'postapi.apps.PostapiConfig',
     'accountapi.apps.AccountapiConfig',
+
+    
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
